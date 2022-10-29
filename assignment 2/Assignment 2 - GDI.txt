@@ -1,0 +1,27 @@
+		add $a1, $a1, $a1 			-> $a1 = 2*$a1 und abspreichern
+		add $a1, $a1, $a1			-> $a1 = 10.000 + 10.0000 -> 20.000 
+		add $v0, $zero, $zero		-> $v0 = 0 (Speicherplatz zuweisen)
+		add $t0, $zero, $zero		-> $t0 = 0 (Speicherplatz zuweisen)
+		
+outer : add $t4, $a0, $t0			-> $t4 = a0 + 0
+		lw $t4, 0($t4)				-> $t4+0 aus Register in der CPU bei "$t4" speichern
+		add $t5, $zero, $zero		-> $t5 = 0 (Speicherplatz zuweisen)
+		add $t1, $zero, $zero		-> $t1 = 0 (Speicherplatz zuweisen)
+		
+inner : add $t3, $a0, $t1			-> $t3 = $a0 + 0 
+		lw $t3, 0($t3)				-> $t3+0 aus Register in der CPU bei "$t3" speichern
+		bne $t3, $t4, skip			-> Wenn t3 nicht t4 ist -> gehe zu "skip"
+		addi $t5, $t5, 1			-> $t5 = $t5 + 1
+		
+skip : 	addi $t1, $t1, 4			-> $t1 (in outer als 0 festgelegt) = $t1 + 4
+		bne $t1, $a1, inner			-> wenn t1 nicht a1 ist gehe zu "inner"
+		slt $t2, $t5, $v0			-> Wenn $t5 kleiner als $v0 ist, dann setz $t2 1, sonst 0!
+		bne $t2, $zero, next		->
+		add $v0, $t5, $zero			->
+		add $v1, $t4, $zero			->
+		
+next : 	addi $t0, $t0, 4			->
+		bne $t0, $a1, outer 		->
+
+
+Wichtige Links: http://www.cburch.com/cs/330/reading/mips-ref.pdf & Aufgabe auf Olat

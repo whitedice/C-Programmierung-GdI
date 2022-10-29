@@ -1,0 +1,3 @@
+C:/Users/eisen/Documents/GitHub/C-Programmierung-GdI/cmake-build-debug/CMakeFiles/test.dir
+C:/Users/eisen/Documents/GitHub/C-Programmierung-GdI/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/eisen/Documents/GitHub/C-Programmierung-GdI/cmake-build-debug/CMakeFiles/rebuild_cache.dir

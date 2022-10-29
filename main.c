@@ -1,19 +1,19 @@
 #include<stdio.h>
 
-typedef char bit;
-bit carry = 0;
-bit halfadd( bit A, bit B ){
+
+int carry = 0;
+int halfadd( int A, int B ){
     carry = A & B;
     return A ^ B;
 }
-bit fulladd( bit A, bit B ){
-    bit xor = A ^ B;
-    bit ret = carry ^ xor;
+int fulladd( int A, int B ){
+    int xor = A ^ B;
+    int ret = carry ^ xor;
     carry = (carry & xor) | (A & B);
     return ret;
 }
 
-void fillNum( int num, bit *array ){
+void fillNum( int num, int *array ){
     int i;
     for( i = 0; i < 4; ++ i ){
         array[i] = ( num >> i ) & 1;
@@ -21,13 +21,23 @@ void fillNum( int num, bit *array ){
 }
 
 int main(){
-    bit num1[4] = {0}, num2[4] = {0};
-    int A = 2, B = 3;
-    fillNum( A, num1 );
-    fillNum( B, num2 );
+    int num1[4] = {0}, num2[4] = {0};
+    num1[0] = 0;
+    num1[1] = 0;
+    num1[2] = 1;
+    num1[3] = 0;
+
+    num2[0] = 0;
+    num2[1] = 0;
+    num2[2] = 0;
+    num2[3] = 1;
+    //int num1[4] = {0}, num2[4] = {0};
+    //int A = 0010, B = 0001;
+    //fillNum( A, num1 );
+    //fillNum( B, num2 );
 
     int r = 0;
-    bit tmp = halfadd( num1[0], num2[0] );
+    int tmp = halfadd( num1[0], num2[0] );
     putchar( tmp ? '1' : '0' );
     r = tmp;
     int i;
@@ -37,6 +47,8 @@ int main(){
         putchar( tmp ? '1' : '0' );
     }
     putchar( carry ? '1' : '0' );
-    printf("\n%d\n\n%d + %d = %d", r, A, B, A+B);
+
+    printf("\n%d\n\n%d + %d = %d", r);
+    //printf("\n%d\n\n%d + %d = %d", r, A, B, A+B);
     return 0;
 }
