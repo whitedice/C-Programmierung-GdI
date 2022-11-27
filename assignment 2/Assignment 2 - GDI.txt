@@ -1,27 +1,75 @@
-		add $a1, $a1, $a1 			-> $a1 = 2*$a1 und abspreichern
-		add $a1, $a1, $a1			-> $a1 = 10.000 + 10.0000 -> 20.000 
-		add $v0, $zero, $zero		-> $v0 = 0 (Speicherplatz zuweisen)
-		add $t0, $zero, $zero		-> $t0 = 0 (Speicherplatz zuweisen)
-		
-outer : add $t4, $a0, $t0			-> $t4 = a0 + 0
-		lw $t4, 0($t4)				-> $t4+0 aus Register in der CPU bei "$t4" speichern
-		add $t5, $zero, $zero		-> $t5 = 0 (Speicherplatz zuweisen)
-		add $t1, $zero, $zero		-> $t1 = 0 (Speicherplatz zuweisen)
-		
-inner : add $t3, $a0, $t1			-> $t3 = $a0 + 0 
-		lw $t3, 0($t3)				-> $t3+0 aus Register in der CPU bei "$t3" speichern
-		bne $t3, $t4, skip			-> Wenn t3 nicht t4 ist -> gehe zu "skip"
-		addi $t5, $t5, 1			-> $t5 = $t5 + 1
-		
-skip : 	addi $t1, $t1, 4			-> $t1 (in outer als 0 festgelegt) = $t1 + 4
-		bne $t1, $a1, inner			-> wenn t1 nicht a1 ist gehe zu "inner"
-		slt $t2, $t5, $v0			-> Wenn $t5 kleiner als $v0 ist, dann setz $t2 1, sonst 0!
-		bne $t2, $zero, next		->
-		add $v0, $t5, $zero			->
-		add $v1, $t4, $zero			->
-		
-next : 	addi $t0, $t0, 4			->
-		bne $t0, $a1, outer 		->
+add $a1, $a1, $a1 			    -> $a1 = 2*$a1 und abspreichern
+add $a1, $a1, $a1			      -> $a1 = 10.000 + 10.0000 -> 20.000 
+add $v0, $zero, $zero		    -> $v0 = 0 (Speicherplatz zuweisen)
+add $t0, $zero, $zero		    -> $t0 = 0 (Speicherplatz zuweisen)
+
+outer : 
+add $t4, $a0, $t0	          -> $t4 = a0 + $t0 (im ersten Schritt noch 0)
+lw $t4, 0($t4)				      -> $t4+0 aus Register in der CPU bei "$t4" speichern
+add $t5, $zero, $zero		    -> $t5 = 0 (Speicherplatz zuweisen)
+add $t1, $zero, $zero		    -> $t1 = 0 (Speicherplatz zuweisen)
+
+inner : 
+add $t3, $a0, $t1		        -> $t3 = $a0 (+ $t1) 
+lw $t3, 0($t3)				      -> $t3+0 aus Register in der CPU bei "$t3" speichern
+bne $t3, $t4, skip			    -> Wenn t3 nicht t4 ist -> gehe zu "skip"
+addi $t5, $t5, 1			      -> $t5 = $t5 + 1
+
+skip :
+addi $t1, $t1, 4		        -> $t1 (in outer als 0 festgelegt) = $t1 + 4
+bne $t1, $a1, inner			    -> Wenn t1 nicht a1 ist gehe zu "inner"
+slt $t2, $t5, $v0			      -> Wenn $t5 kleiner als $v0 ist, dann setz $t2 1, sonst auf 0
+bne $t2, $zero, next		    -> wenn $t2 nicht 0 ist gehe zu "next" (Also im Zusammenhang mit der Letzten Zeile: Wenn $t5 größer als $v0 ist)
+add $v0, $t5, $zero			    -> $v0 = $t5
+add $v1, $t4, $zero			    -> $v1 = $t4 
+
+next :
+addi $t0, $t0, 4		        ->  $t0 += 4
+bne $t0, $a1, outer 		    ->  Wenn $t0 nicht $a1 ist -> gehe zu "outer"
 
 
-Wichtige Links: http://www.cburch.com/cs/330/reading/mips-ref.pdf & Aufgabe auf Olat
+Alte Begründung:
+#################
+Wenn ich das Programm richtig verstehe beschreibt "v0" den aktuellen StepCount 
+(also wie oft das Prgramm durch "inner" ausgeführt hat)
+
+$v1 müsste am Ende dann 20000 sein, weil das Programm v1 = t4 am Ende von skip setzt 
+und t4 ist a0 (Anfang vom Array) + t0 () 
+
+
+# # # # # 
+N E U E
+# # # # #
+
+Für mich relevanter (umgeschriebener) Code
+
+Anfang:
+a1 = 20.000 
+a0 = Anfang vom Array
+
+outer : 
+t4 = a0 + t0              // t4 = current step
+t5 = 0
+t1 = 0
+
+inner : 
+t3 = a0 + t1 
+if (t3 == t4)
+  t5 += 1                   // Wird nur im 1. Durchlauf 0 == 0 passen... 
+
+skip :
+t1 += 4                     // t1 immer in 4er Schritten hochaddieren
+if (t1 != a1) goto "inner"  // Wiederholt es solange bis t1 von 0 (siehe outer) bis 20000 (siehe Anfang) kommt
+else:
+  if ($t5 < $v0)            // Wenn er fertig ist Speichert er die Steps ab solang es nicht schonmal mehr waren
+    v0 = t5                 
+    v1 = t4                 // v1 = Anfang vom Array (a0)
+
+next : // Wiederholt alles nochmal, bis t0 in 4er Schritten 20000 erreicht
+t0 += 4
+if (t0 == a1)   -> Programm beenden
+else            -> wieder von outer beginnen
+
+
+v0 sagt die Steps, welche das Programm gemacht hat (=20000/4  = 5000 = länge des Arrays)
+v1 sagt den current step, bei dem sich das Programm befindet (müsste am ende 20000 sein...)
