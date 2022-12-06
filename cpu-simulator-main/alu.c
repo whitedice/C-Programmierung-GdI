@@ -12,9 +12,7 @@ int32_t xor(int32_t a, int32_t b) {
     return (a | b) & (~a | ~b);
 }
 
-int32_t invert(int32_t a) {
-    return alu(~a, 1, 1, 0, 0x02, aluResult, 0);
-}
+void invert(int32_t a, int32_t* aluResult);
 
 void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_t* aluResult, bool* zero) {
 
@@ -67,13 +65,15 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
             break;
         case 0x06: // SUB (ersetzen sie das - durch eine entsprechende Lösung auf der Basis von & oder |)
             // Wenn beide positiv sind
-            if (A >= 0 && B >= 0)
-                 alu(A, invert(B), 1, 0, 0x02, aluResult, zero);
-
+            if (A >= 0 && B >= 0) {
+                invert(B, aluResult);
+                alu(A, *aluResult, 1, 0, 0x02, aluResult, zero);
+            }
             // Wenn nur A negativ ist
-            else if (A < 0 && B >= 0)
-                 alu(invert(A), B, 1, 0, 0x02, aluResult, zero);
-
+            else if (A < 0 && B >= 0) {
+                invert(A, aluResult);
+                alu(*aluResult, B, 1, 0, 0x02, aluResult, zero);
+            }
             // Wenn nur B negativ ist oder beide negativ sind
             else
                  alu(A, B, 1, 0, 0x02, aluResult, zero);
@@ -89,3 +89,6 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
     }
 }
 
+void invert(int32_t a, int32_t* aluResult) {
+    alu(~a, 1, 1, 0, 0x02, aluResult, 0);
+}

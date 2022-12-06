@@ -32,14 +32,14 @@ int16_t main(int16_t argc, char** argv) {
 
 /* Add values */
 	ALUInput = 0x2;
-	A = 30; B = 5;
+	A = 30; B = 6;
 	aluOp1 = 1; aluOp0 = 0; 
 	alu(A, B, aluOp1, aluOp0, ALUInput, &aluResult, &zero);
 	printf("Add Result %i\n", aluResult);
 	
 /* Sub values */
 	ALUInput = 0x6;
-	A = 30; B = 5;
+	A = 30; B = 8;
 	aluOp1 = 1; aluOp0 = 0; 
 	alu(A, B, aluOp1, aluOp0, ALUInput, &aluResult, &zero);
 	printf("Sub Result %i\n", aluResult);
