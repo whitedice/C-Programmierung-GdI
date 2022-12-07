@@ -17,10 +17,16 @@ void instructionDecode(uint32_t instruction, uint16_t *op, uint16_t *rs, uint16_
     //        int16_t rs; //25-21
     //        int16_t rt; //20-16
     //        int16_t rd; //15-11
+
     //        int16_t pcControl; //15-0
-    //
     //        int16_t jumpDest; //25-0
     
- /* Hier ergänzen */
+    /* Hier ergänzen */
+    *op = (instruction>>26);
+    *rs = (instruction<<6)>>27;
+    *rt = (instruction<<11)>>27;
+    *rs = (instruction<<16)>>27;
 
+    *pcControl = (instruction<<16)>>16;
+    *jumpDest = (instruction<<6)>>6;
 }

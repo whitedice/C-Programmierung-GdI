@@ -39,7 +39,7 @@ int16_t main(int16_t argc, char** argv) {
 	
 /* Sub values */
 	ALUInput = 0x6;
-	A = 30; B = 8;
+	A = 4; B = 5;
 	aluOp1 = 1; aluOp0 = 0; 
 	alu(A, B, aluOp1, aluOp0, ALUInput, &aluResult, &zero);
 	printf("Sub Result %i\n", aluResult);

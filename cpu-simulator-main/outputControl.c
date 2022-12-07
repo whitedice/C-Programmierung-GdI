@@ -18,8 +18,83 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
         bool* regWrite, bool* memRead, bool* memWrite, bool* branch, bool* jump,\
         bool* aluOp1, bool* aluOp0) {
     switch (op) {
- /*
- Ergänzen Sie die Logik
- */
+    // R Format - Case 0
+    // 0b ... Anderen
+    // Tabelle siehe Handy
+    // + jump
+
+        // R-Befehle
+        case 0:
+            *regDst = 1;
+            *aluSrc = 0;
+            *memToReg = 0;
+            *regWrite = 1;
+            *memRead = 0;
+            *memWrite = 0;
+            *branch = 0;
+            *jump = 0;
+            *aluOp1 = 1;
+            *aluOp0 = 0;
+            break;
+
+        // lw
+        case 0b100011:
+            *regDst = 0;
+            *aluSrc = 1;
+            *memToReg = 1;
+            *regWrite = 1;
+            *memRead = 1;
+            *memWrite = 0;
+            *branch = 0;
+            *jump = 0;
+            *aluOp1 = 0;
+            *aluOp0 = 0;
+            break;
+
+
+        // sw
+        case 0b101011:
+            //*regDst = 0;
+            *aluSrc = 1;
+            //*memToReg = 0;
+            *regWrite = 0;
+            *memRead = 0;
+            *memWrite = 1;
+            *branch = 0;
+            *jump = 0;
+            *aluOp1 = 0;
+            *aluOp0 = 0;
+            break;
+
+
+        // branch equal
+        case 0b000100:
+            //*regDst = 0;
+            *aluSrc = 0;
+            //*memToReg = 0;
+            *regWrite = 0;
+            *memRead = 0;
+            *memWrite = 0;
+            *branch = 1;
+            *jump = 0;
+            *aluOp1 = 0;
+            *aluOp0 = 1;
+            break;
+
+
+        // jump
+        case 0b000010:
+            //*regDst = 0;
+            //*aluSrc = 1;
+            //*memToReg = 1;
+            *regWrite = 0;
+            //*memRead = 0;
+            *memWrite = 0;
+            *branch = 0;
+            *jump = 1;
+            //*aluOp1 = 0;
+            //*aluOp0 = 0;
+            break;
+
     }
 }

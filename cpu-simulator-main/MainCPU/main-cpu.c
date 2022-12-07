@@ -17,12 +17,11 @@
 #include <stdint.h>
 
 #include "memory.h"
-/*
 #include "alu.h"
 #include "registerBank.h"
 #include "outputControl.h"
 #include "decode.h"
-*/
+
 /*
  * 
  */
@@ -40,7 +39,7 @@ int16_t main(int16_t argc, char** argv) {
     if (argc < 2) {
         // printf("Usage : ./cpu <filename>");
         // exit(0);
-        memorysize = readFile("test.o", &memory);
+        memorysize = readFile("test.bin", &memory);
     } else {
         memorysize = readFile(argv[1], &memory);
     }
@@ -97,20 +96,36 @@ int16_t main(int16_t argc, char** argv) {
         // in der letzten Version haben wir aluControl / aluInput manuell gesetzt
         // Definieren sie hier die Logik zum Ermitteln von ALU Input
         int16_t aluInput;
-       if (!aluOp1 && !aluOp0) // LW & SW
-          aluInput = 0x02;
-       else 
 
-/*
-       ...
-       */
 
-        
+        if (!aluOp1 && !aluOp0) // LW & SW
+            aluInput = 0b010;
+        else if (!aluOp1 && aluOp0) // branch eq
+            aluInput = 0b110;
+        else if (aluOp1 && !aluOp0) // R-Befehle
+            switch ((instruction<<26)>>26) { // Function field bestimmen
+                case 100000:
+                    aluInput = 0b010;
+                    break;
+                case 100010:
+                    aluInput = 0b110;
+                    break;
+                case 100100:
+                    aluInput = 0b000;
+                    break;
+                case 100101:
+                    aluInput = 0b000;
+                    break;
+                case 101010:
+                    aluInput = 0b111;
+                    break;
+        }
+
+
         if (aluSrc)
             alu(A, pcControl, aluOp1, aluOp0, aluInput, &aluResult, &zero);
         else
             alu(A, B, aluOp1, aluOp0, aluInput, &aluResult, &zero);
-
 
         // Write Registers
 
@@ -157,7 +172,6 @@ int16_t main(int16_t argc, char** argv) {
         }
 
     }
-*/
     writeFile(memory,memorysize);
     return (EXIT_SUCCESS);
 }

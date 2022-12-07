@@ -53,7 +53,7 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
             *aluResult = A | B;
             *zero = 0;
             break;
-        case 0x02: // ADD (ersetzen sie das + durch eine entsprechende Lösung auf der Basis von & oder |)
+        case 0x02: // ADD (ersetzen sie das + durch eine entsprechende Loesung auf der Basis von & oder |)
             while (B != 0)
             {
                 *aluResult = A & B;
@@ -63,7 +63,7 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
             *aluResult = A;
             *zero = 0;
             break;
-        case 0x06: // SUB (ersetzen sie das - durch eine entsprechende Lösung auf der Basis von & oder |)
+        case 0x06: // SUB (ersetzen sie das - durch eine entsprechende Loesung auf der Basis von & oder |)
             // Wenn beide positiv sind
             if (A >= 0 && B >= 0) {
                 invert(B, aluResult, zero);
@@ -82,58 +82,11 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
             break;
 
 
-        case 0x07:
-            // set on less than (ersetzen sie das < durch eine entsprechende Lösung auf der Basis von & oder |)
-            bool negA = (A>>32) & 1; // True, wenn Vorzeichenbit = 1 ist
-            bool negB = (B>>32) & 1;
-
-            if (!negA && !negB) // Wenn beide pos. sind -> runterzählen und das, was als erstes 0 erreicht, ist kleiner
-            {
-                while (A != 0 && B != 0)
-                {
-                    alu(A, 1, 1, 0, 0x6, aluResult, zero);
-                    A = *aluResult;
-                    alu(B, 1, 1, 0, 0x6, aluResult, zero);
-                    B = *aluResult;
-                }
-                if (A == 0)
-                {
-                    *zero = 1;
-                }
-                else
-                {
-                    *zero = 0;
-                }
-            }
-            else if (negA && negB) // Wenn beide neg. sind -> Hochzählen, was als erstes 0 ist, ist größer
-            {
-                while (A != 0 && B != 0)
-                {
-                    alu(A, 1, 1, 1, 0x02, aluResult, zero);
-                    A = *aluResult;
-                    alu(B, 1, 1, 1, 0x02, aluResult, zero);
-                    B = *aluResult;
-                }
-
-                if (A == 0)
-                {
-                    *zero = 0;
-                }
-                else
-                {
-                    *zero = 1;
-                }
-            }
-            else // Wenn eine Zahl neg. und eine pos. ist -> Pos.-Zahl ist größer
-            {
-                if(negA)
-                {
-                    *zero = 1;
-                }
-                else
-                {
-                    *zero = 0;
-                }
+        case 0x07:  // set on less than (ersetzen sie das < durch eine entsprechende Loesung auf der Basis von & oder |)
+            alu(A, B, 1, 0, 0x6, aluResult, zero);
+            *zero = 0; // Wenn es = oder groesser ist, soll es 0 zurückgeben
+            if((*aluResult>>31) & 1) { // wenn bei der Substraktion ein minus rauskommt, wissen wir das a kleiner ist
+                *zero = 1;
             }
             break;
     }
