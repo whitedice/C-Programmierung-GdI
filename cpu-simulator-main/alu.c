@@ -80,6 +80,14 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
 
             *zero = 0;
             break;
+
+            // FEHLT NOCH!
+            // FOR Schleife was als erstes 0 erreicht
+            // (Zahl>>32) & 1 -> Ist sie negativ?
+            // Wenn beide Neg. sind -> Hochzählen, was als erstes 0 ist = größer
+            // Wenn 1 neg. und 1 pos. ist -> pos ist größer
+            // Wenn beide pos -> runterzählen und das was als erstes 0 erreicht ist kleiner
+
         case 0x07: // set on less than (ersetzen sie das < durch eine entsprechende Lösung auf der Basis von & oder |)
             if (A < B)
                 *zero = 1;
