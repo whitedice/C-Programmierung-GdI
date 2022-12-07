@@ -81,18 +81,60 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
             *zero = 0;
             break;
 
-            // FEHLT NOCH!
-            // FOR Schleife was als erstes 0 erreicht
-            // (Zahl>>32) & 1 -> Ist sie negativ?
-            // Wenn beide Neg. sind -> Hochzählen, was als erstes 0 ist = größer
-            // Wenn 1 neg. und 1 pos. ist -> pos ist größer
-            // Wenn beide pos -> runterzählen und das was als erstes 0 erreicht ist kleiner
 
-        case 0x07: // set on less than (ersetzen sie das < durch eine entsprechende Lösung auf der Basis von & oder |)
-            if (A < B)
-                *zero = 1;
-            else
-                *zero = 0;
+        case 0x07:
+            // set on less than (ersetzen sie das < durch eine entsprechende Lösung auf der Basis von & oder |)
+            bool negA = (A>>32) & 1; // True, wenn Vorzeichenbit = 1 ist
+            bool negB = (B>>32) & 1;
+
+            if (!negA && !negB) // Wenn beide pos. sind -> runterzählen und das, was als erstes 0 erreicht, ist kleiner
+            {
+                while (A != 0 && B != 0)
+                {
+                    alu(A, 1, 1, 0, 0x6, aluResult, zero);
+                    A = *aluResult;
+                    alu(B, 1, 1, 0, 0x6, aluResult, zero);
+                    B = *aluResult;
+                }
+                if (A == 0)
+                {
+                    *zero = 1;
+                }
+                else
+                {
+                    *zero = 0;
+                }
+            }
+            else if (negA && negB) // Wenn beide neg. sind -> Hochzählen, was als erstes 0 ist, ist größer
+            {
+                while (A != 0 && B != 0)
+                {
+                    alu(A, 1, 1, 1, 0x02, aluResult, zero);
+                    A = *aluResult;
+                    alu(B, 1, 1, 1, 0x02, aluResult, zero);
+                    B = *aluResult;
+                }
+
+                if (A == 0)
+                {
+                    *zero = 0;
+                }
+                else
+                {
+                    *zero = 1;
+                }
+            }
+            else // Wenn eine Zahl neg. und eine pos. ist -> Pos.-Zahl ist größer
+            {
+                if(negA)
+                {
+                    *zero = 1;
+                }
+                else
+                {
+                    *zero = 0;
+                }
+            }
             break;
     }
 }
