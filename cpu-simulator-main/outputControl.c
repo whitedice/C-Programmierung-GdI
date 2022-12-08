@@ -38,7 +38,7 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
             break;
 
         // lw
-        case 0b100011:
+        case 0b110001:
             *regDst = 0;
             *aluSrc = 1;
             *memToReg = 1;
@@ -53,7 +53,7 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
 
 
         // sw
-        case 0b101011:
+        case 0b110101:
             //*regDst = 0;
             *aluSrc = 1;
             //*memToReg = 0;
@@ -68,7 +68,7 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
 
 
         // branch equal
-        case 0b000100:
+        case 0b001000:
             //*regDst = 0;
             *aluSrc = 0;
             //*memToReg = 0;
