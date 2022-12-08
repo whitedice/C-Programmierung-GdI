@@ -24,7 +24,7 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
     // + jump
 
         // R-Befehle
-        case 0:
+        case 0b000000:
             *regDst = 1;
             *aluSrc = 0;
             *memToReg = 0;

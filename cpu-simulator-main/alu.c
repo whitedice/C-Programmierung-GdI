@@ -31,16 +31,16 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
           01          beq
           10          determined by opcode
      * 
-     Opcode  aluOp  Operation  Funct Field  Action  ALU input
-     ------  -----  ---------  -----------  ------  ---------
-     LW      00     load       xxxxxx       add     010
-     SW      00     store      xxxxxx       add     010
-     branch  01     branch eq  xxxxxx       sub     110
-     R       10     add        100000       add     010
-     R       10     sub        100010       sub     110
-     R       10     AND        100100       and     000
-     R       10     OR         100101       or      001
-     R       10     set less   101010       set less111
+     Opcode  aluOp  Operation  Funct Field  Action      ALU input
+     ------  -----  ---------  -----------  ------      ---------
+     LW      00     load       xxxxxx       add         010
+     SW      00     store      xxxxxx       add         010
+     branch  01     branch eq  xxxxxx       sub         110
+     R       10     add        100000       add         010
+     R       10     sub        100010       sub         110
+     R       10     AND        100100       and         000
+     R       10     OR         100101       or          001
+     R       10     set less   101010       set less    111
      */
 
     // ALU operations
