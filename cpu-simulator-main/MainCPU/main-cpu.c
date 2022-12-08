@@ -104,19 +104,19 @@ int16_t main(int16_t argc, char** argv) {
             aluInput = 0b110;
         else if (aluOp1 && !aluOp0) // R-Befehle
             switch ((instruction<<26)>>26) { // Function field bestimmen
-                case 100000:
+                case 0b100000:
                     aluInput = 0b010;
                     break;
-                case 100010:
+                case 0b100010:
                     aluInput = 0b110;
                     break;
-                case 100100:
+                case 0b100100:
                     aluInput = 0b000;
                     break;
-                case 100101:
+                case 0b100101:
                     aluInput = 0b000;
                     break;
-                case 101010:
+                case 0b101010:
                     aluInput = 0b111;
                     break;
         }
