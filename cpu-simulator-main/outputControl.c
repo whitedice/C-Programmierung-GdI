@@ -18,11 +18,6 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
         bool* regWrite, bool* memRead, bool* memWrite, bool* branch, bool* jump,\
         bool* aluOp1, bool* aluOp0) {
     switch (op) {
-    // R Format - Case 0
-    // 0b ... Anderen
-    // Tabelle siehe Handy
-    // + jump
-
         // R-Befehle
         case 0b000000:
             *regDst = 1;
@@ -38,7 +33,7 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
             break;
 
         // lw
-        case 0b110001:
+        case 0b100011:
             *regDst = 0;
             *aluSrc = 1;
             *memToReg = 1;
@@ -53,10 +48,10 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
 
 
         // sw
-        case 0b110101:
-            //*regDst = 0;
+        case 0b101011:
+            *regDst = 0;
             *aluSrc = 1;
-            //*memToReg = 0;
+            *memToReg = 0;
             *regWrite = 0;
             *memRead = 0;
             *memWrite = 1;
@@ -68,10 +63,10 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
 
 
         // branch equal
-        case 0b001000:
-            //*regDst = 0;
+        case 0b000100:
+            *regDst = 0;
             *aluSrc = 0;
-            //*memToReg = 0;
+            *memToReg = 0;
             *regWrite = 0;
             *memRead = 0;
             *memWrite = 0;
@@ -83,18 +78,17 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
 
 
         // jump
-        case 0b000010:
-            //*regDst = 0;
-            //*aluSrc = 1;
-            //*memToReg = 1;
+        case 0b010000:
+            *regDst = 0;
+            *aluSrc = 0;
+            *memToReg = 0;
             *regWrite = 0;
-            //*memRead = 0;
+            *memRead = 0;
             *memWrite = 0;
             *branch = 0;
             *jump = 1;
-            //*aluOp1 = 0;
-            //*aluOp0 = 0;
+            *aluOp1 = 0;
+            *aluOp0 = 0;
             break;
-
     }
 }
