@@ -99,10 +99,15 @@ int16_t main(int16_t argc, char** argv) {
 
 
         if (!aluOp1 && !aluOp0) // LW & SW
+        {
             aluInput = 0b010;
+        }
         else if (!aluOp1 && aluOp0) // branch eq
+        {
             aluInput = 0b110;
+        }
         else if (aluOp1 && !aluOp0) // R-Befehle
+        {
             switch ((instruction<<26)>>26) { // Function field bestimmen
                 case 0b100000: // R-add
                     aluInput = 0b010;
@@ -119,6 +124,7 @@ int16_t main(int16_t argc, char** argv) {
                 case 0b101010: // R-set less
                     aluInput = 0b111;
                     break;
+            }
         }
 
 
