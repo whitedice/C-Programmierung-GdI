@@ -5,6 +5,7 @@
  */
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
 void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_t* aluResult, bool* zero);
 
@@ -62,12 +63,14 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
             }
             *aluResult = A;
             *zero = 0;
+            printf("Add: %i", aluResult); // %s is format specifier
             break;
         case 0x06: // SUB (ersetzen sie das - durch eine entsprechende Loesung auf der Basis von & oder |)
             // Wenn beide positiv sind
             if (A >= 0 && B >= 0) {
                 invert(B, aluResult, zero);
                 alu(A, *aluResult, 1, 0, 0x02, aluResult, zero);
+                printf("Sub: %i", aluResult);
             }
             // Wenn nur A negativ ist
             else if (A < 0 && B >= 0) {
