@@ -31,42 +31,47 @@ void outputControl(int16_t op, bool* regDst, bool* aluSrc, bool* memToReg, \
     *aluOp0 = 0;
 
     switch (op) {
-        // R-Befehle
+        // R
         case 0b000000:
             *regDst = 1;
             *regWrite = 1;
+
             *aluOp1 = 1;
             *aluOp0 = 0;
             break;
 
-        // lw
+        // LW
         case 0b100011:
             *aluSrc = 1;
             *memToReg = 1;
             *regWrite = 1;
             *memRead = 1;
+
             *aluOp1 = 0;
             *aluOp0 = 0;
             break;
 
-        // sw
+        // SW
         case 0b101011:
             *aluSrc = 1;
             *memWrite = 1;
+
             *aluOp1 = 0;
             *aluOp0 = 0;
             break;
 
-        // branch equal
+        // B-EQ
         case 0b000100:
             *branch = 1;
+
             *aluOp0 = 0;
             *aluOp0 = 1;
             break;
 
-        // jump
+        // JUMP
         case 0b010000:
             *jump = 1;
+
             *aluOp1 = 0;
             *aluOp0 = 0;
             break;
