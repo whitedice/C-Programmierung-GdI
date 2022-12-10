@@ -63,23 +63,23 @@ void alu(int32_t A, int32_t B, bool aluOp1, bool aluOp0, int8_t ALUinput, int32_
             }
             *aluResult = A;
             *zero = 0;
-            printf("Add: %i", aluResult); // %s is format specifier
+            printf("Add: %i + %i = %i\n", A, B, *aluResult); // %s is format specifier
             break;
         case 0x06: // SUB (ersetzen sie das - durch eine entsprechende Loesung auf der Basis von & oder |)
             // Wenn beide positiv sind
             if (A >= 0 && B >= 0) {
                 invert(B, aluResult, zero);
                 alu(A, *aluResult, 1, 0, 0x02, aluResult, zero);
-                printf("Sub: %i", aluResult);
+                printf("Sub: %i - %i = %i\n", A, B, *aluResult);
             }
-            // Wenn nur A negativ ist
+                // Wenn nur A negativ ist
             else if (A < 0 && B >= 0) {
                 invert(A, aluResult, zero);
                 alu(*aluResult, B, 1, 0, 0x02, aluResult, zero);
             }
-            // Wenn nur B negativ ist oder beide negativ sind
+                // Wenn nur B negativ ist oder beide negativ sind
             else
-                 alu(A, B, 1, 0, 0x02, aluResult, zero);
+                alu(A, B, 1, 0, 0x02, aluResult, zero);
 
             *zero = 0;
             break;
